@@ -9,9 +9,11 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
-    Stripe.api_key = Rails.application.credentials.stripe_api_key
+    Stripe.api_key = "sk_test_FNTiFuH0GscB9LzGhV0GYiP7007ygwcCnl"
 
     plan_id = params[:plan_id]
+    puts "test"
+    puts plan_id
     plan = Stripe::Plan.retrieve(plan_id)
     token = params[:stripeToken]
 
@@ -48,5 +50,9 @@ class SubscriptionsController < ApplicationController
     current_user.subscribed = false
 
     redirect_to root_path, notice: "Your subscription has been cancelled."
+  end
+
+  def index
+    new
   end
 end

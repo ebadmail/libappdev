@@ -1,0 +1,2113 @@
+  [1m[35m (5.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (4.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (2.8ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to DeviseCreateUsers (20180423233748)
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar DEFAULT '' NOT NULL, "encrypted_password" varchar DEFAULT '' NOT NULL, "reset_password_token" varchar, "reset_password_sent_at" datetime, "remember_created_at" datetime, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" datetime, "last_sign_in_at" datetime, "current_sign_in_ip" varchar, "last_sign_in_ip" varchar, "name" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[36mprimary::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20180423233748"]]
+  [1m[35m (3.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateActiveStorageTables (20180423234307)
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE TABLE "active_storage_blobs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "key" varchar NOT NULL, "filename" varchar NOT NULL, "content_type" varchar, "metadata" text, "byte_size" bigint NOT NULL, "checksum" varchar NOT NULL, "created_at" datetime NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_blobs_on_key" ON "active_storage_blobs" ("key")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "record_type" varchar NOT NULL, "record_id" integer NOT NULL, "blob_id" integer NOT NULL, "created_at" datetime NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE  INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20180423234307"]]
+  [1m[35m (2.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateBooks (20180423234909)
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE TABLE "books" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "description" text, "author" varchar, "user_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[36mprimary::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20180423234909"]]
+  [1m[35m (2.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddDataToUsers (20180423235417)
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.7ms)[0m  [1m[35mALTER TABLE "users" ADD "stripe_id" varchar[0m
+  [1m[35m (0.5ms)[0m  [1m[35mALTER TABLE "users" ADD "stripe_subscription_id" varchar[0m
+  [1m[35m (0.3ms)[0m  [1m[35mALTER TABLE "users" ADD "card_last4" varchar[0m
+  [1m[35m (0.6ms)[0m  [1m[35mALTER TABLE "users" ADD "card_exp_month" integer[0m
+  [1m[35m (0.4ms)[0m  [1m[35mALTER TABLE "users" ADD "card_exp_year" integer[0m
+  [1m[35m (0.4ms)[0m  [1m[35mALTER TABLE "users" ADD "card_type" varchar[0m
+  [1m[35m (0.3ms)[0m  [1m[35mALTER TABLE "users" ADD "admin" boolean[0m
+  [1m[35m (0.3ms)[0m  [1m[35mALTER TABLE "users" ADD "subscribed" boolean[0m
+  [1m[36mprimary::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20180423235417"]]
+  [1m[35m (2.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateLibraries (20180423235557)
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "libraries" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "book_id" integer, "user_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[36mprimary::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20180423235557"]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.8ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2020-01-27 18:52:12.082130"], ["updated_at", "2020-01-27 18:52:12.082130"]]
+  [1m[35m (2.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+DEPRECATION WARNING: Single arity template handlers are deprecated. Template handlers must
+now accept two parameters, the view object and the source for the view object.
+Change:
+  >> Coffee::Rails::TemplateHandler.call(template)
+To:
+  >> Coffee::Rails::TemplateHandler.call(template, source)
+ (called from <top (required)> at c:/libappdev/config/environment.rb:5)
+DEPRECATION WARNING: Single arity template handlers are deprecated. Template handlers must
+now accept two parameters, the view object and the source for the view object.
+Change:
+  >> Coffee::Rails::TemplateHandler.call(template)
+To:
+  >> Coffee::Rails::TemplateHandler.call(template, source)
+ (called from <top (required)> at c:/libappdev/config/environment.rb:5)
+Started GET "/" for ::1 at 2020-01-27 13:54:11 -0500
+  [1m[35m (6.9ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.4ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 11.6ms | Allocations: 1579)
+Started GET "/" for ::1 at 2020-01-27 13:54:13 -0500
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.8ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 7.2ms | Allocations: 1242)
+Completed 500 Internal Server Error in 1092ms (ActiveRecord: 0.8ms | Allocations: 82275)
+
+
+
+Errno::EACCES - Permission denied @ rb_file_s_rename - (c:/libappdev/tmp/cache/assets/sprockets/v4.0.0/iT/iT_51oyK7Q_xJmOUxZUT9S5eEQvC3R7FBGRV-4ilhKs.cache.89509100.5468.129036, c:/libappdev/tmp/cache/assets/sprockets/v4.0.0/iT/iT_51oyK7Q_xJmOUxZUT9S5eEQvC3R7FBGRV-4ilhKs.cache):
+
+Started POST "/__better_errors/6d1317d3bfb8981a/variables" for ::1 at 2020-01-27 13:54:14 -0500
+Completed 200 OK in 2943ms (Views: 2901.1ms | ActiveRecord: 1.4ms | Allocations: 343013)
+
+
+Started GET "/" for ::1 at 2020-01-27 14:05:14 -0500
+  [1m[35m (3.7ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.3ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 11.3ms | Allocations: 1579)
+Completed 200 OK in 1256ms (Views: 1216.9ms | ActiveRecord: 1.5ms | Allocations: 223017)
+
+
+Started GET "/pricing" for ::1 at 2020-01-27 14:05:22 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 2.4ms | Allocations: 631)
+Completed 200 OK in 30ms (Views: 28.0ms | ActiveRecord: 0.0ms | Allocations: 15126)
+
+
+Started GET "/pricing" for ::1 at 2020-01-27 14:05:22 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 1.3ms | Allocations: 225)
+Completed 200 OK in 26ms (Views: 25.0ms | ActiveRecord: 0.0ms | Allocations: 13848)
+
+
+Started GET "/" for ::1 at 2020-01-27 14:05:30 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 7.8ms | Allocations: 727)
+Completed 200 OK in 31ms (Views: 28.6ms | ActiveRecord: 0.6ms | Allocations: 14642)
+
+
+Started GET "/" for ::1 at 2020-01-27 14:05:30 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.4ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 5.3ms | Allocations: 693)
+Completed 200 OK in 29ms (Views: 27.4ms | ActiveRecord: 0.4ms | Allocations: 14582)
+
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 14:05:37 -0500
+Processing by RegistrationsController#new as HTML
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.7ms | Allocations: 532)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 158.4ms | Allocations: 22219)
+Completed 200 OK in 219ms (Views: 194.1ms | ActiveRecord: 3.7ms | Allocations: 53442)
+
+
+Started POST "/users" for ::1 at 2020-01-27 14:05:59 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"OW+/CDquDI7/Q7FXRmFpy+vpYkkKfNCTf1EiBvEK8Hxd2VNHQENMhVVjNubB05qP0/s1esdhp8CRqX+U6MNK6w==", "user"=>{"name"=>"Test", "email"=>"ebadmail@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ebadmail@gmail.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (2.1ms)[0m  [1m[32mINSERT INTO "users" ("email", "encrypted_password", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["email", "ebadmail@gmail.com"], ["encrypted_password", "$2a$11$XgfGXllXyVEYNttmnWc7l.wTuu8.1tavEYQE1hAr99pj24QwXzPvG"], ["name", "Test"], ["created_at", "2020-01-27 19:06:01.351256"], ["updated_at", "2020-01-27 19:06:01.351256"]]
+  [1m[35m (3.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Update (0.9ms)[0m  [1m[33mUPDATE "users" SET "sign_in_count" = ?, "current_sign_in_at" = ?, "last_sign_in_at" = ?, "current_sign_in_ip" = ?, "last_sign_in_ip" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["sign_in_count", 1], ["current_sign_in_at", "2020-01-27 19:06:01.361214"], ["last_sign_in_at", "2020-01-27 19:06:01.361214"], ["current_sign_in_ip", "::1"], ["last_sign_in_ip", "::1"], ["updated_at", "2020-01-27 19:06:01.361381"], ["id", 1]]
+  [1m[35m (2.7ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/pricing
+Completed 302 Found in 2062ms (ActiveRecord: 9.8ms | Allocations: 16705)
+
+
+Started GET "/pricing" for ::1 at 2020-01-27 14:06:01 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/pricing/index.html.erb:13
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 5.3ms | Allocations: 1190)
+Completed 200 OK in 31ms (Views: 29.5ms | ActiveRecord: 0.4ms | Allocations: 14877)
+
+
+Started GET "/subscriptions/new?plan=book_worm" for ::1 at 2020-01-27 14:06:08 -0500
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"book_worm"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 1.4ms | Allocations: 382)
+Completed 200 OK in 37ms (Views: 27.7ms | ActiveRecord: 0.4ms | Allocations: 15200)
+
+
+Started GET "/subscriptions/new?plan=book_worm" for ::1 at 2020-01-27 14:09:08 -0500
+  [1m[35m (5.9ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"book_worm"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 4.0ms | Allocations: 632)
+Completed 200 OK in 213ms (Views: 174.8ms | ActiveRecord: 1.2ms | Allocations: 51800)
+
+
+Started GET "/subscriptions/new?plan=book_worm" for ::1 at 2020-01-27 14:12:12 -0500
+  [1m[35m (5.7ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"book_worm"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 4.1ms | Allocations: 632)
+Completed 200 OK in 160ms (Views: 122.3ms | ActiveRecord: 1.4ms | Allocations: 51804)
+
+
+Started POST "/subscriptions" for ::1 at 2020-01-27 14:12:39 -0500
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Thap5YTVcmwOs6h2mFaJu09WbbiLrh8TwGjTh06vdQIjHdubL3qgPuVE+OoVAs6BEKr5z/NZ6iUdAlE1rKaavg==", "plan_id"=>"", "stripeToken"=>"tok_1G5d0jGIOQDtJuifwdwT87yo", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 96ms (ActiveRecord: 0.0ms | Allocations: 10240)
+
+
+
+Stripe::AuthenticationError - No API key provided. Set your API key using "Stripe.api_key = <API-KEY>". You can generate API keys from the Stripe web interface. See https://stripe.com/api for details, or email support@stripe.com if you have any questions.:
+  app/controllers/subscriptions_controller.rb:15:in `create'
+
+Started POST "/__better_errors/aaf8ff4d2fe21a44/variables" for ::1 at 2020-01-27 14:12:39 -0500
+Started POST "/subscriptions" for ::1 at 2020-01-27 14:13:30 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Thap5YTVcmwOs6h2mFaJu09WbbiLrh8TwGjTh06vdQIjHdubL3qgPuVE+OoVAs6BEKr5z/NZ6iUdAlE1rKaavg==", "plan_id"=>"", "stripeToken"=>"tok_1G5d0jGIOQDtJuifwdwT87yo", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 378ms (ActiveRecord: 0.0ms | Allocations: 3303)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:15:in `create'
+
+Started POST "/__better_errors/721df3a0b2a1b9f1/variables" for ::1 at 2020-01-27 14:13:31 -0500
+Started GET "/subscriptions" for ::1 at 2020-01-27 14:14:03 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+
+AbstractController::ActionNotFound - The action 'index' could not be found for SubscriptionsController:
+
+Started POST "/__better_errors/d45502f481468dc3/variables" for ::1 at 2020-01-27 14:14:03 -0500
+DEPRECATION WARNING: Using `bin/rake routes` is deprecated and will be removed in Rails 6.1. Use `bin/rails routes` instead.
+ (called from load at C:/Ruby26-x64/bin/rake:23)
+Started GET "/subscriptions" for ::1 at 2020-01-27 14:18:10 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by SubscriptionsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Completed 406 Not Acceptable in 36ms (ActiveRecord: 1.1ms | Allocations: 18822)
+
+
+
+ActionController::MissingExactTemplate - SubscriptionsController#index is missing a template for request formats: text/html:
+
+Started POST "/__better_errors/63d75f5124eeb81a/variables" for ::1 at 2020-01-27 14:18:10 -0500
+Started GET "/subscriptions" for ::1 at 2020-01-27 14:18:28 -0500
+  [1m[35m (4.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SubscriptionsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Completed 406 Not Acceptable in 44ms (ActiveRecord: 1.2ms | Allocations: 20310)
+
+
+
+ActionController::MissingExactTemplate - SubscriptionsController#index is missing a template for request formats: text/html:
+
+Started POST "/__better_errors/30afe0e69dfef1b5/variables" for ::1 at 2020-01-27 14:18:28 -0500
+Started GET "/subscriptions" for ::1 at 2020-01-27 14:19:00 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by SubscriptionsController#index as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Completed 406 Not Acceptable in 20ms (ActiveRecord: 1.5ms | Allocations: 17002)
+
+
+
+ActionController::MissingExactTemplate - SubscriptionsController#index is missing a template for request formats: text/html:
+
+Started POST "/__better_errors/ca3bb9f55ced6c38/variables" for ::1 at 2020-01-27 14:19:00 -0500
+Started GET "/subscriptions" for ::1 at 2020-01-27 14:19:03 -0500
+Processing by SubscriptionsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Completed 406 Not Acceptable in 7ms (ActiveRecord: 0.4ms | Allocations: 2144)
+
+
+
+ActionController::MissingExactTemplate - SubscriptionsController#index is missing a template for request formats: text/html:
+
+Started POST "/__better_errors/036d31f405ae11c5/variables" for ::1 at 2020-01-27 14:19:03 -0500
+Started GET "/subscriptions" for ::1 at 2020-01-27 14:19:20 -0500
+  [1m[35m (6.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SubscriptionsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Completed 406 Not Acceptable in 42ms (ActiveRecord: 1.5ms | Allocations: 20329)
+
+
+
+ActionController::MissingExactTemplate - SubscriptionsController#index is missing a template for request formats: text/html:
+
+Started POST "/__better_errors/eafac3996c2b5cdf/variables" for ::1 at 2020-01-27 14:19:21 -0500
+Started GET "/subscriptions" for ::1 at 2020-01-27 14:20:16 -0500
+Processing by SubscriptionsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering subscriptions/index.html.erb within layouts/subscribe
+  Rendered subscriptions/index.html.erb within layouts/subscribe (Duration: 6.3ms | Allocations: 630)
+Completed 200 OK in 190ms (Views: 176.3ms | ActiveRecord: 0.3ms | Allocations: 35989)
+
+
+Started POST "/subscriptions" for ::1 at 2020-01-27 14:20:38 -0500
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Thap5YTVcmwOs6h2mFaJu09WbbiLrh8TwGjTh06vdQIjHdubL3qgPuVE+OoVAs6BEKr5z/NZ6iUdAlE1rKaavg==", "plan_id"=>"", "stripeToken"=>"tok_1G5d8SGIOQDtJuifKoonU9VA", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 686ms (ActiveRecord: 0.0ms | Allocations: 11630)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:15:in `create'
+
+Started POST "/__better_errors/79f3057742560209/variables" for ::1 at 2020-01-27 14:20:39 -0500
+Started GET "/subscriptions/new?plan=starter" for ::1 at 2020-01-27 14:20:54 -0500
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"starter"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 3.5ms | Allocations: 370)
+Completed 200 OK in 43ms (Views: 36.0ms | ActiveRecord: 0.4ms | Allocations: 14991)
+
+
+Started POST "/subscriptions" for ::1 at 2020-01-27 14:21:07 -0500
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"6mJBoN68navfc+ykMFq2YIbP6t4JM78Iqj/PmaQkNbopXe60YbqW1RLVluGEICHH8jd1hBo+XM3muqc4LiybJA==", "plan_id"=>"", "stripeToken"=>"tok_1G5d8tGIOQDtJuifTKvcarc6", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 5271ms (ActiveRecord: 0.0ms | Allocations: 2218)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:15:in `create'
+
+Started POST "/__better_errors/2d12ff2f861467e8/variables" for ::1 at 2020-01-27 14:21:12 -0500
+Started GET "/pricing" for ::1 at 2020-01-27 14:23:06 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/pricing/index.html.erb:13
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 8.7ms | Allocations: 1477)
+Completed 200 OK in 34ms (Views: 30.7ms | ActiveRecord: 0.6ms | Allocations: 15470)
+
+
+Started GET "/subscriptions/new?plan=scholar" for ::1 at 2020-01-27 14:23:09 -0500
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"scholar"}
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 0.7ms | Allocations: 175)
+Completed 200 OK in 42ms (Views: 35.0ms | ActiveRecord: 0.9ms | Allocations: 14666)
+
+
+Started POST "/subscriptions" for ::1 at 2020-01-27 14:23:16 -0500
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"irkg+xoUJXG4x2cYWr2uiaPzWrg8lt6dAGhvLhnMQ1ZJho/vpRIuD3VhHV3uxzku1wvF4i+bPVhM7QePk8TtyA==", "plan_id"=>"", "stripeToken"=>"tok_1G5dB0GIOQDtJuif2vSwrdwi", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 361ms (ActiveRecord: 0.0ms | Allocations: 2079)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:15:in `create'
+
+Started POST "/__better_errors/b18db5c2fcbe8ec5/variables" for ::1 at 2020-01-27 14:23:17 -0500
+Started GET "/" for ::1 at 2020-01-27 14:25:02 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 6.6ms | Allocations: 1292)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+Completed 200 OK in 70ms (Views: 43.1ms | ActiveRecord: 1.7ms | Allocations: 20940)
+
+
+Started GET "/users/edit" for ::1 at 2020-01-27 14:25:05 -0500
+Processing by RegistrationsController#edit as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering devise/registrations/edit.html.erb within layouts/application
+  Rendered devise/registrations/edit.html.erb within layouts/application (Duration: 151.2ms | Allocations: 22252)
+Completed 200 OK in 209ms (Views: 198.6ms | ActiveRecord: 0.6ms | Allocations: 39869)
+
+
+Started GET "/" for ::1 at 2020-01-27 14:25:16 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 5.0ms | Allocations: 694)
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+Completed 200 OK in 58ms (Views: 54.8ms | ActiveRecord: 1.6ms | Allocations: 15422)
+
+
+Started GET "/users/sign_out" for 127.0.0.1 at 2020-01-27 14:25:35 -0500
+  [1m[35m (3.9ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for 127.0.0.1 at 2020-01-27 14:25:40 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for 127.0.0.1 at 2020-01-27 14:25:44 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/si%20gn_out" for ::1 at 2020-01-27 14:27:04 -0500
+
+ArgumentError - Invalid route name, already in use: 'new_user_session' 
+You may have defined two routes with the same name using the `:as` option, or you may be overriding a route already defined by a resource with the same naming. For the latter, you can restrict the routes created with `resources` as explained here: 
+https://guides.rubyonrails.org/routing.html#restricting-the-routes-created:
+  config/routes.rb:13:in `block in <top (required)>'
+  config/routes.rb:3:in `<top (required)>'
+
+Started POST "/__better_errors/2cd382b7a8a7b6e4/variables" for ::1 at 2020-01-27 14:27:04 -0500
+Started GET "/users/sign_out" for ::1 at 2020-01-27 14:27:10 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 14:27:12 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 14:28:06 -0500
+  [1m[35m (6.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 14:28:10 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 14:30:06 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 14:30:08 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 14:30:23 -0500
+  [1m[35m (6.7ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Devise::SessionsController#destroy as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 43ms (ActiveRecord: 1.8ms | Allocations: 23135)
+
+
+Started GET "/" for ::1 at 2020-01-27 14:30:23 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.3ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 6.8ms | Allocations: 1491)
+Completed 200 OK in 200ms (Views: 170.1ms | ActiveRecord: 0.8ms | Allocations: 39864)
+
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 14:30:28 -0500
+Processing by RegistrationsController#new as HTML
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.7ms | Allocations: 532)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 133.6ms | Allocations: 17693)
+Completed 200 OK in 172ms (Views: 170.8ms | ActiveRecord: 0.0ms | Allocations: 33705)
+
+
+Started POST "/users" for ::1 at 2020-01-27 14:30:51 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Tnt0F/G5C0w0CpeC+hjqvVMHXoKND1irDQ86MApc0NqJo54ufXvHf/iXaDkRkOb+LuiGQubev+bJDqnfEohq/A==", "user"=>{"name"=>"test1", "email"=>"ebadmail@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ebadmail@gmail.com"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[31mrollback transaction[0m
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.1ms | Allocations: 79)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 9.3ms | Allocations: 6032)
+Completed 200 OK in 225ms (Views: 39.9ms | ActiveRecord: 0.6ms | Allocations: 28908)
+
+
+Started POST "/users" for ::1 at 2020-01-27 14:31:08 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"ovLbWkcuTKvS4KB9s+8te4H0YFzoLVWeX3HrN7vig5YzIvy31JiM77ZJzNb4h8rDCM1KF1L/W12y+42od9xV7g==", "user"=>{"name"=>"trtr dfjfj", "email"=>"ebadmail@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ebadmail@gmail.com"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.2ms | Allocations: 79)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 7.3ms | Allocations: 6023)
+Completed 200 OK in 165ms (Views: 28.9ms | ActiveRecord: 0.9ms | Allocations: 25626)
+
+
+Started POST "/users" for ::1 at 2020-01-27 14:31:45 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Zork9OwU+Ai0z36Wn3PX/MUTxHtJqK9sZU79XFSrj0X3WsMZf6I4TNBmEj3UGzBETCruMPN6oa+IxJvDmJVZPQ==", "user"=>{"name"=>"yassine", "email"=>"test@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "test@gmail.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (3.2ms)[0m  [1m[32mINSERT INTO "users" ("email", "encrypted_password", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["email", "test@gmail.com"], ["encrypted_password", "$2a$11$b6K8SD9Q7475lZHumS4e1eYCeNhI5J2NPKjOKtDSbv.vpQVvp/NwS"], ["name", "yassine"], ["created_at", "2020-01-27 19:31:45.575515"], ["updated_at", "2020-01-27 19:31:45.575515"]]
+  [1m[35m (3.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Update (1.0ms)[0m  [1m[33mUPDATE "users" SET "sign_in_count" = ?, "current_sign_in_at" = ?, "last_sign_in_at" = ?, "current_sign_in_ip" = ?, "last_sign_in_ip" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["sign_in_count", 1], ["current_sign_in_at", "2020-01-27 19:31:45.586015"], ["last_sign_in_at", "2020-01-27 19:31:45.586015"], ["current_sign_in_ip", "::1"], ["last_sign_in_ip", "::1"], ["updated_at", "2020-01-27 19:31:45.586179"], ["id", 2]]
+  [1m[35m (3.0ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/pricing
+Completed 302 Found in 158ms (ActiveRecord: 10.6ms | Allocations: 12577)
+
+
+Started GET "/pricing" for ::1 at 2020-01-27 14:31:45 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/pricing/index.html.erb:13
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 12.5ms | Allocations: 1478)
+Completed 200 OK in 40ms (Views: 37.0ms | ActiveRecord: 0.3ms | Allocations: 16033)
+
+
+Started GET "/subscriptions/new?plan=book_worm" for ::1 at 2020-01-27 14:31:54 -0500
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"book_worm"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 2.6ms | Allocations: 377)
+Completed 200 OK in 43ms (Views: 34.7ms | ActiveRecord: 0.3ms | Allocations: 15215)
+
+
+Started POST "/subscriptions" for ::1 at 2020-01-27 14:32:06 -0500
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"DwCcTRlpAW302TrCCdJhyBNbFV3akwakw1j4vtoQJApX7uuPgHXNsXR2p0BCOEBbKjDAVp9f+QIzqxjrg6rnNQ==", "plan_id"=>"", "stripeToken"=>"tok_1G5dJYGIOQDtJuif7RH1CYlH", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 536ms (ActiveRecord: 0.0ms | Allocations: 11634)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:15:in `create'
+
+Started POST "/__better_errors/b3b12d05322b05b1/variables" for ::1 at 2020-01-27 14:32:07 -0500
+Started GET "/subscriptions" for ::1 at 2020-01-27 14:35:32 -0500
+  [1m[35m (6.4ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SubscriptionsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  Rendering subscriptions/index.html.erb within layouts/subscribe
+  Rendered subscriptions/index.html.erb within layouts/subscribe (Duration: 4.5ms | Allocations: 632)
+Completed 200 OK in 181ms (Views: 140.1ms | ActiveRecord: 1.6ms | Allocations: 52393)
+
+
+Started POST "/__better_errors/b3b12d05322b05b1/variables" for ::1 at 2020-01-27 14:42:17 -0500
+Started POST "/subscriptions" for ::1 at 2020-01-27 14:42:29 -0500
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Wfa2esDKCya7zKHl4NY5oOFfXms1mLeltTNriGtxpBrIJpGXU3zLYt9lzU6rvt4YaGZ0II9KuWZYuQ0Xp09yYg==", "plan_id"=>"", "stripeToken"=>"tok_1G5dTaGIOQDtJuif3iFWayeM", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 422ms (ActiveRecord: 0.0ms | Allocations: 11642)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:15:in `create'
+
+Started POST "/__better_errors/82e1cd07b6eb250f/variables" for ::1 at 2020-01-27 14:42:29 -0500
+Started GET "/pricing" for ::1 at 2020-01-27 14:42:42 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/pricing/index.html.erb:13
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 10.2ms | Allocations: 1546)
+Completed 200 OK in 48ms (Views: 45.7ms | ActiveRecord: 0.5ms | Allocations: 15566)
+
+
+Started GET "/users" for ::1 at 2020-01-27 14:42:43 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/users"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_in" for ::1 at 2020-01-27 14:42:52 -0500
+Processing by Devise::SessionsController#new as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 30ms (ActiveRecord: 0.4ms | Allocations: 6514)
+
+
+Started GET "/" for ::1 at 2020-01-27 14:42:52 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.3ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 5.3ms | Allocations: 1435)
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+Completed 200 OK in 84ms (Views: 38.9ms | ActiveRecord: 1.3ms | Allocations: 21129)
+
+
+Started GET "/users/edit" for ::1 at 2020-01-27 14:42:53 -0500
+Processing by RegistrationsController#edit as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  Rendering devise/registrations/edit.html.erb within layouts/application
+  Rendered devise/registrations/edit.html.erb within layouts/application (Duration: 127.0ms | Allocations: 17565)
+Completed 200 OK in 173ms (Views: 163.7ms | ActiveRecord: 0.4ms | Allocations: 35180)
+
+
+Started DELETE "/users/sign_out" for ::1 at 2020-01-27 14:42:57 -0500
+  
+ActionController::RoutingError (No route matches [DELETE] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 14:43:06 -0500
+Processing by Devise::SessionsController#destroy as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 12ms (ActiveRecord: 0.3ms | Allocations: 2981)
+
+
+Started GET "/" for ::1 at 2020-01-27 14:43:06 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.5ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.1ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 6.3ms | Allocations: 696)
+Completed 200 OK in 33ms (Views: 31.6ms | ActiveRecord: 0.5ms | Allocations: 14667)
+
+
+Started GET "/users/sign_in" for ::1 at 2020-01-27 14:43:14 -0500
+Processing by Devise::SessionsController#new as HTML
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.9ms | Allocations: 628)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 33.2ms | Allocations: 6936)
+Completed 200 OK in 63ms (Views: 62.0ms | ActiveRecord: 0.0ms | Allocations: 21728)
+
+
+Started POST "/users/sign_in" for ::1 at 2020-01-27 17:23:34 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"ljqa6Smnv69uVO5BdZcWLbcT63GoQ57n3bnjcl1MUMcz/NAutZnlvKKF+RP5bPf+jVu8jtrpR2rnU19h+ogGsw==", "user"=>{"email"=>"test@gmail.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["email", "test@gmail.com"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Update (3.9ms)[0m  [1m[33mUPDATE "users" SET "current_sign_in_at" = ?, "sign_in_count" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["current_sign_in_at", "2020-01-27 22:23:35.029970"], ["sign_in_count", 2], ["updated_at", "2020-01-27 22:23:35.030258"], ["id", 2]]
+  [1m[35m (3.2ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/
+Completed 302 Found in 203ms (ActiveRecord: 7.7ms | Allocations: 10045)
+
+
+Started GET "/" for ::1 at 2020-01-27 17:23:35 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.5ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.1ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 6.2ms | Allocations: 713)
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+Completed 200 OK in 36ms (Views: 34.9ms | ActiveRecord: 0.8ms | Allocations: 15513)
+
+
+Started GET "/users/edit" for ::1 at 2020-01-27 17:23:37 -0500
+Processing by RegistrationsController#edit as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  Rendering devise/registrations/edit.html.erb within layouts/application
+  Rendered devise/registrations/edit.html.erb within layouts/application (Duration: 15.1ms | Allocations: 6292)
+Completed 200 OK in 51ms (Views: 45.3ms | ActiveRecord: 0.4ms | Allocations: 21663)
+
+
+Started DELETE "/users/sign_out" for ::1 at 2020-01-27 17:23:41 -0500
+  
+ActionController::RoutingError (No route matches [DELETE] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 17:23:43 -0500
+Processing by Devise::SessionsController#destroy as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 9ms (ActiveRecord: 0.3ms | Allocations: 2235)
+
+
+Started GET "/" for ::1 at 2020-01-27 17:23:43 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.4ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 5.2ms | Allocations: 695)
+Completed 200 OK in 37ms (Views: 35.2ms | ActiveRecord: 0.4ms | Allocations: 14639)
+
+
+Started GET "/users/sign_in" for ::1 at 2020-01-27 17:23:52 -0500
+Processing by Devise::SessionsController#new as HTML
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.2ms | Allocations: 134)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 14.8ms | Allocations: 5458)
+Completed 200 OK in 39ms (Views: 37.6ms | ActiveRecord: 0.0ms | Allocations: 19543)
+
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 17:23:54 -0500
+Processing by RegistrationsController#new as HTML
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.4ms | Allocations: 122)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 14.3ms | Allocations: 6390)
+Completed 200 OK in 44ms (Views: 42.7ms | ActiveRecord: 0.0ms | Allocations: 20972)
+
+
+Started POST "/users" for ::1 at 2020-01-27 17:24:07 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"wtx/HxS0heMtW5UA1bAmTUmPvZNm1KrnLbHjsSmuOEc36/oB+TWQvdJ6f5yRMQlFnoHlp08bmOZbW+zWqh6kmg==", "user"=>{"name"=>"tetst", "email"=>"ebadmail@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ebadmail@gmail.com"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[31mrollback transaction[0m
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.1ms | Allocations: 79)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 16.5ms | Allocations: 6069)
+Completed 200 OK in 176ms (Views: 37.1ms | ActiveRecord: 0.6ms | Allocations: 27174)
+
+
+Started POST "/users" for ::1 at 2020-01-27 17:24:17 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"R7ltG0hQA6RbX5ma94irlVwj/SMU4SXNo9lFWtMLLnz92GkSkDLQ89prkz9eklBr9uJjvy9Ntb7l3kDWf82+ag==", "user"=>{"name"=>"tetst jhgh", "email"=>"ebadmail@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ebadmail@gmail.com"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.3ms | Allocations: 79)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 9.1ms | Allocations: 6058)
+Completed 200 OK in 165ms (Views: 30.6ms | ActiveRecord: 0.5ms | Allocations: 26053)
+
+
+Started POST "/users" for ::1 at 2020-01-27 17:24:34 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"5HQWIcRc/OO5nicDb7DRqxzvg1tUFzSREWX3tb7udZ9eFRIoHD4vtDiqLabGqipVti4dx2+7pOJXYvI5EijliQ==", "user"=>{"name"=>"tetst jhgh", "email"=>"ebadmail@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ebadmail@gmail.com"], ["LIMIT", 1]]
+  [1m[35m (0.3ms)[0m  [1m[31mrollback transaction[0m
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.2ms | Allocations: 79)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 7.9ms | Allocations: 6011)
+Completed 200 OK in 175ms (Views: 40.1ms | ActiveRecord: 1.0ms | Allocations: 25615)
+
+
+Started POST "/users" for ::1 at 2020-01-27 17:24:49 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"D9icPTwmTG1dDf2eIHBxoajOTSa5QTAQB3s+cy8fx421uZg05ESfOtw59zuJaopfAg/TuoLtoGNBfDv/g9lXmw==", "user"=>{"name"=>"tetst jhgh", "email"=>"jdd@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "jdd@gmail.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (3.3ms)[0m  [1m[32mINSERT INTO "users" ("email", "encrypted_password", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["email", "jdd@gmail.com"], ["encrypted_password", "$2a$11$pJqFUOgo0y/DT7oMuolJ3.u8AS50uTfCNyrMQljUsHCrB1qHd8Rna"], ["name", "tetst jhgh"], ["created_at", "2020-01-27 22:24:49.841006"], ["updated_at", "2020-01-27 22:24:49.841006"]]
+  [1m[35m (2.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Update (1.4ms)[0m  [1m[33mUPDATE "users" SET "sign_in_count" = ?, "current_sign_in_at" = ?, "last_sign_in_at" = ?, "current_sign_in_ip" = ?, "last_sign_in_ip" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["sign_in_count", 1], ["current_sign_in_at", "2020-01-27 22:24:49.853181"], ["last_sign_in_at", "2020-01-27 22:24:49.853181"], ["current_sign_in_ip", "::1"], ["last_sign_in_ip", "::1"], ["updated_at", "2020-01-27 22:24:49.853410"], ["id", 3]]
+  [1m[35m (2.9ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/pricing
+Completed 302 Found in 156ms (ActiveRecord: 11.0ms | Allocations: 12642)
+
+
+Started GET "/pricing" for ::1 at 2020-01-27 17:24:49 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/pricing/index.html.erb:13
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 3.8ms | Allocations: 1074)
+Completed 200 OK in 26ms (Views: 24.8ms | ActiveRecord: 0.3ms | Allocations: 14775)
+
+
+Started GET "/subscriptions/new?plan=book_worm" for ::1 at 2020-01-27 17:24:52 -0500
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"book_worm"}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 3.1ms | Allocations: 368)
+Completed 200 OK in 37ms (Views: 26.3ms | ActiveRecord: 0.8ms | Allocations: 14970)
+
+
+Started POST "/subscriptions" for ::1 at 2020-01-27 17:25:04 -0500
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"wMqcGeu1BqvYA4FjeXADs/5v2PQauS3pFMS1NjbzB0jpoBGuQZH0uWbUszs4jglNCFpYB/AyK+8Mvz/GY4JnFA==", "plan_id"=>"", "stripeToken"=>"tok_1G5g0wGIOQDtJuifFGSJ51AE", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 560ms (ActiveRecord: 0.0ms | Allocations: 2236)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:15:in `create'
+
+Started POST "/__better_errors/70e26de751776138/variables" for ::1 at 2020-01-27 17:25:05 -0500
+Started POST "/subscriptions" for ::1 at 2020-01-27 18:31:12 -0500
+  [1m[35m (4.6ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"wMqcGeu1BqvYA4FjeXADs/5v2PQauS3pFMS1NjbzB0jpoBGuQZH0uWbUszs4jglNCFpYB/AyK+8Mvz/GY4JnFA==", "plan_id"=>"", "stripeToken"=>"tok_1G5g0wGIOQDtJuifFGSJ51AE", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 1672ms (ActiveRecord: 0.0ms | Allocations: 13000)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:16:in `create'
+
+Started POST "/__better_errors/76b309a24df11fb5/variables" for ::1 at 2020-01-27 18:31:14 -0500
+Started POST "/__better_errors/76b309a24df11fb5/variables" for ::1 at 2020-01-27 18:32:14 -0500
+Started POST "/subscriptions" for ::1 at 2020-01-27 18:32:17 -0500
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"wMqcGeu1BqvYA4FjeXADs/5v2PQauS3pFMS1NjbzB0jpoBGuQZH0uWbUszs4jglNCFpYB/AyK+8Mvz/GY4JnFA==", "plan_id"=>"", "stripeToken"=>"tok_1G5g0wGIOQDtJuifFGSJ51AE", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 1006ms (ActiveRecord: 0.0ms | Allocations: 3297)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:17:in `create'
+
+Started POST "/__better_errors/5fea5aa3e1ef48b4/variables" for ::1 at 2020-01-27 18:32:18 -0500
+Started POST "/subscriptions" for ::1 at 2020-01-27 18:32:41 -0500
+  [1m[35m (4.3ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"wMqcGeu1BqvYA4FjeXADs/5v2PQauS3pFMS1NjbzB0jpoBGuQZH0uWbUszs4jglNCFpYB/AyK+8Mvz/GY4JnFA==", "plan_id"=>"", "stripeToken"=>"tok_1G5g0wGIOQDtJuifFGSJ51AE", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+Completed 500 Internal Server Error in 652ms (ActiveRecord: 0.0ms | Allocations: 12996)
+
+
+
+Faraday::ResourceNotFound - the server responded with status 404:
+  app/controllers/subscriptions_controller.rb:17:in `create'
+
+Started POST "/__better_errors/7a471794894cebfa/variables" for ::1 at 2020-01-27 18:32:42 -0500
+Started POST "/__better_errors/7a471794894cebfa/variables" for ::1 at 2020-01-27 18:33:01 -0500
+Started GET "/subscriptions/new?plan=book_worm" for ::1 at 2020-01-27 18:36:00 -0500
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"book_worm"}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 3.8ms | Allocations: 621)
+Completed 200 OK in 248ms (Views: 209.3ms | ActiveRecord: 1.6ms | Allocations: 50480)
+
+
+Started GET "/pricing" for ::1 at 2020-01-27 18:36:44 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/pricing/index.html.erb:13
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 10.7ms | Allocations: 1503)
+Completed 200 OK in 53ms (Views: 49.1ms | ActiveRecord: 0.6ms | Allocations: 15511)
+
+
+Started GET "/pricing" for ::1 at 2020-01-27 18:36:48 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  [1m[36mUser Load (2.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/pricing/index.html.erb:13
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 8.1ms | Allocations: 1098)
+Completed 200 OK in 53ms (Views: 49.1ms | ActiveRecord: 2.5ms | Allocations: 14778)
+
+
+Started GET "/subscriptions/new?plan=starter&plan_id=plan_GcvrRIvfxztgB1" for ::1 at 2020-01-27 18:36:51 -0500
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"starter", "plan_id"=>"plan_GcvrRIvfxztgB1"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 1.9ms | Allocations: 179)
+Completed 200 OK in 35ms (Views: 28.9ms | ActiveRecord: 0.4ms | Allocations: 14662)
+
+
+Started POST "/subscriptions" for ::1 at 2020-01-27 18:37:16 -0500
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"AtBJWFOl+WWXKKM5gqgnHZorQeV6B+kL9OBesradOPMrusTv+YELdyn/kWHDVi3jbB7BFpCM7w3sm9RC4+xYrw==", "plan_id"=>"plan_GcvrRIvfxztgB1", "stripeToken"=>"tok_1G5h8pGIOQDtJuifsnn7KOBi", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:20:in `create'
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/subscriptions_controller.rb:41:in `create'
+  [1m[36mUser Update (3.3ms)[0m  [1m[33mUPDATE "users" SET "stripe_id" = ?, "stripe_subscription_id" = ?, "subscribed" = ?, "card_last4" = ?, "card_exp_month" = ?, "card_exp_year" = ?, "card_type" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["stripe_id", "cus_Gcx2aQBKQNkhU8"], ["stripe_subscription_id", "sub_Gcx2ZCfvbD7sRL"], ["subscribed", 1], ["card_last4", "4242"], ["card_exp_month", 4], ["card_exp_year", 2024], ["card_type", "undefined"], ["updated_at", "2020-01-27 23:37:19.559362"], ["id", 3]]
+  ↳ app/controllers/subscriptions_controller.rb:41:in `create'
+  [1m[35m (2.9ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/subscriptions_controller.rb:41:in `create'
+Redirected to http://localhost:3000/
+Completed 302 Found in 2974ms (ActiveRecord: 7.0ms | Allocations: 12350)
+
+
+Started GET "/" for ::1 at 2020-01-27 18:37:19 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.5ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 6.4ms | Allocations: 1282)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+Completed 200 OK in 63ms (Views: 36.2ms | ActiveRecord: 1.5ms | Allocations: 20997)
+
+
+Started GET "/users/edit" for ::1 at 2020-01-27 18:37:28 -0500
+Processing by RegistrationsController#edit as HTML
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  Rendering devise/registrations/edit.html.erb within layouts/application
+  Rendered devise/registrations/edit.html.erb within layouts/application (Duration: 158.1ms | Allocations: 22347)
+Completed 200 OK in 204ms (Views: 192.9ms | ActiveRecord: 0.8ms | Allocations: 40002)
+
+
+Started GET "/library" for ::1 at 2020-01-27 18:37:36 -0500
+Processing by LibraryController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  Rendering library/index.html.erb within layouts/application
+  [1m[36mBook Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "books" INNER JOIN "libraries" ON "books"."id" = "libraries"."book_id" WHERE "libraries"."user_id" = ? LIMIT ?[0m  [["user_id", 3], ["LIMIT", 1]]
+  ↳ app/views/library/index.html.erb:14
+  Rendered library/index.html.erb within layouts/application (Duration: 30.1ms | Allocations: 4888)
+Completed 200 OK in 105ms (Views: 52.9ms | ActiveRecord: 1.3ms | Allocations: 26267)
+
+
+Started GET "/" for ::1 at 2020-01-27 18:37:41 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 4.5ms | Allocations: 694)
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+Completed 200 OK in 69ms (Views: 67.4ms | ActiveRecord: 1.2ms | Allocations: 15459)
+
+
+  [1m[35m (3.7ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" DESC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Update (3.2ms)[0m  [1m[33mUPDATE "users" SET "updated_at" = ?, "admin" = ? WHERE "users"."id" = ?[0m  [["updated_at", "2020-01-27 23:41:43.623034"], ["admin", 1], ["id", 1]]
+  [1m[35m (5.0ms)[0m  [1m[36mcommit transaction[0m
+Started DELETE "/users/sign_out" for ::1 at 2020-01-27 18:42:01 -0500
+  
+ActionController::RoutingError (No route matches [DELETE] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 18:42:04 -0500
+Processing by Devise::SessionsController#destroy as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 16ms (ActiveRecord: 0.4ms | Allocations: 2840)
+
+
+Started GET "/" for ::1 at 2020-01-27 18:42:04 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 6.4ms | Allocations: 695)
+Completed 200 OK in 35ms (Views: 33.1ms | ActiveRecord: 0.6ms | Allocations: 14665)
+
+
+Started GET "/users/sign_in" for ::1 at 2020-01-27 18:42:08 -0500
+Processing by Devise::SessionsController#new as HTML
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 1.4ms | Allocations: 623)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 27.9ms | Allocations: 6934)
+Completed 200 OK in 58ms (Views: 57.2ms | ActiveRecord: 0.0ms | Allocations: 21713)
+
+
+Started POST "/users/sign_in" for ::1 at 2020-01-27 18:42:13 -0500
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"sszCqmjChfBoas2S3eLvOOPUfNF8oiCJcPo9VS0XeanSJ4Uf72mphH9FK3ZDPBs+1nRZer5OzC9i4KT3pqPVdg==", "user"=>{"email"=>"ebadmail@gmail.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["email", "ebadmail@gmail.com"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Update (3.3ms)[0m  [1m[33mUPDATE "users" SET "current_sign_in_at" = ?, "sign_in_count" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["current_sign_in_at", "2020-01-27 23:42:13.298560"], ["sign_in_count", 2], ["updated_at", "2020-01-27 23:42:13.298817"], ["id", 1]]
+  [1m[35m (3.6ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/
+Completed 302 Found in 203ms (ActiveRecord: 7.5ms | Allocations: 9949)
+
+
+Started GET "/" for ::1 at 2020-01-27 18:42:13 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.5ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  Rendered collection of templates [0 times] (Duration: 0.0ms | Allocations: 3)
+  Rendered books/index.html.erb within layouts/application (Duration: 4.2ms | Allocations: 692)
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+Completed 200 OK in 31ms (Views: 29.8ms | ActiveRecord: 0.7ms | Allocations: 15470)
+
+
+Started GET "/books/new" for ::1 at 2020-01-27 18:42:15 -0500
+Processing by BooksController#new as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering books/new.html.erb within layouts/application
+  Rendered books/_form.html.erb (Duration: 15.7ms | Allocations: 6963)
+  Rendered books/new.html.erb within layouts/application (Duration: 19.7ms | Allocations: 7288)
+Completed 200 OK in 74ms (Views: 47.3ms | ActiveRecord: 0.7ms | Allocations: 28053)
+
+
+Started POST "/books" for ::1 at 2020-01-27 18:44:21 -0500
+Processing by BooksController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"3nIwH0xisqbmyBNeM8GmLb4eaOLwczm25TzoiqMWqXpOKtOqTGR/aMGlaY2H3ZrxGXe9/04OT62NaLUP6GCbvg==", "book"=>{"title"=>"Horton", "description"=>"Text Description", "author"=>"Horton", "thumbnail"=>#<ActionDispatch::Http::UploadedFile:0x000000000a945098 @tempfile=#<Tempfile:C:/Users/ebadm/AppData/Local/Temp/RackMultipart20200127-7516-1psnw6f.jpg>, @original_filename="200.jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"book[thumbnail]\"; filename=\"200.jpg\"\r\nContent-Type: image/jpeg\r\n">}, "commit"=>"Create Book"}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mBook Create (1.2ms)[0m  [1m[32mINSERT INTO "books" ("title", "description", "author", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["title", "Horton"], ["description", "Text Description"], ["author", "Horton"], ["user_id", 1], ["created_at", "2020-01-27 23:44:21.694094"], ["updated_at", "2020-01-27 23:44:21.694094"]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mActiveStorage::Blob Load (0.2ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mActiveStorage::Blob Create (0.5ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "olpu7nbwyyxehi4yw4irr8iut45x"], ["filename", "200.jpg"], ["content_type", "image/jpeg"], ["metadata", "{\"identified\":true}"], ["byte_size", 22482], ["checksum", "nAzpJJzMLF5s+NJ+wuQRYw=="], ["created_at", "2020-01-27 23:44:21.897130"]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mActiveStorage::Attachment Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "thumbnail"], ["record_type", "Book"], ["record_id", 1], ["blob_id", 1], ["created_at", "2020-01-27 23:44:21.900401"]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mBook Update (0.2ms)[0m  [1m[33mUPDATE "books" SET "updated_at" = ? WHERE "books"."id" = ?[0m  [["updated_at", "2020-01-27 23:44:21.904778"], ["id", 1]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[35m (3.9ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+[36m  Disk Storage (2.3ms) [0m[32mUploaded file to key: olpu7nbwyyxehi4yw4irr8iut45x (checksum: nAzpJJzMLF5s+NJ+wuQRYw==)[0m
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 7376e7bf-d052-4be0-8e2f-0bc98c519855) to Sidekiq(default) with arguments: #<GlobalID:0x000000000ab8d710 @uri=#<URI::GID gid://book-library/ActiveStorage::Blob/1>>
+Completed 500 Internal Server Error in 10349ms (ActiveRecord: 9.2ms | Allocations: 72433)
+
+
+
+Redis::TimeoutError - Redis::TimeoutError:
+  app/controllers/books_controller.rb:31:in `block in create'
+  app/controllers/books_controller.rb:30:in `create'
+
+Started POST "/__better_errors/012e2af787d3d079/variables" for ::1 at 2020-01-27 18:44:32 -0500
+Started POST "/books" for ::1 at 2020-01-27 18:53:14 -0500
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by BooksController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"wghfXs9Vrerm5uqsRGbeXPz3DpL7aIZtJfVlbZOK4mr9fMdjqbKjXGAKzORzk7Koggy7iMyT6g0TL/ieQVj36w==", "book"=>{"title"=>"Horton", "description"=>"Text Description", "author"=>"Horton", "thumbnail"=>#<ActionDispatch::Http::UploadedFile:0x000000000aa35228 @tempfile=#<Tempfile:C:/Users/ebadm/AppData/Local/Temp/RackMultipart20200127-7516-1qtre2l.jpg>, @original_filename="200.jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"book[thumbnail]\"; filename=\"200.jpg\"\r\nContent-Type: image/jpeg\r\n">}, "commit"=>"Create Book"}
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mBook Create (2.3ms)[0m  [1m[32mINSERT INTO "books" ("title", "description", "author", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["title", "Horton"], ["description", "Text Description"], ["author", "Horton"], ["user_id", 1], ["created_at", "2020-01-27 23:53:14.115157"], ["updated_at", "2020-01-27 23:53:14.115157"]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mActiveStorage::Attachment Load (0.2ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "pw8f3magqxiq6nqihmsik1baecdu"], ["filename", "200.jpg"], ["content_type", "image/jpeg"], ["metadata", "{\"identified\":true}"], ["byte_size", 22482], ["checksum", "nAzpJJzMLF5s+NJ+wuQRYw=="], ["created_at", "2020-01-27 23:53:14.149725"]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mActiveStorage::Attachment Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "thumbnail"], ["record_type", "Book"], ["record_id", 2], ["blob_id", 2], ["created_at", "2020-01-27 23:53:14.155330"]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[36mBook Update (0.2ms)[0m  [1m[33mUPDATE "books" SET "updated_at" = ? WHERE "books"."id" = ?[0m  [["updated_at", "2020-01-27 23:53:14.160962"], ["id", 2]]
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+  [1m[35m (3.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/books_controller.rb:31:in `block in create'
+[36m  Disk Storage (5.9ms) [0m[32mUploaded file to key: pw8f3magqxiq6nqihmsik1baecdu (checksum: nAzpJJzMLF5s+NJ+wuQRYw==)[0m
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 9c402396-a938-4318-9738-de8ba10c7bbd) to Sidekiq(default) with arguments: #<GlobalID:0x00000000073972e8 @uri=#<URI::GID gid://book-library/ActiveStorage::Blob/2>>
+Completed 500 Internal Server Error in 10103ms (ActiveRecord: 7.9ms | Allocations: 16423)
+
+
+
+Redis::TimeoutError - Redis::TimeoutError:
+  app/controllers/books_controller.rb:31:in `block in create'
+  app/controllers/books_controller.rb:30:in `create'
+
+Started POST "/__better_errors/d9ef0f92bd752852/variables" for ::1 at 2020-01-27 18:53:24 -0500
+DEPRECATION WARNING: config.active_storage.queue is deprecated and will be removed in Rails 6.1. Set config.active_storage.queues.purge and config.active_storage.queues.analysis instead. (called from <top (required)> at c:/libappdev/config/environment.rb:5)
+DEPRECATION WARNING: config.active_storage.queue is deprecated and will be removed in Rails 6.1. Set config.active_storage.queues.purge and config.active_storage.queues.analysis instead. (called from <top (required)> at c:/libappdev/config/environment.rb:5)
+  [1m[35m (5.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+DEPRECATION WARNING: config.active_storage.queue is deprecated and will be removed in Rails 6.1. Set config.active_storage.queues.purge and config.active_storage.queues.analysis instead. (called from <top (required)> at c:/libappdev/config/environment.rb:5)
+  [1m[35m (4.9ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/books" for ::1 at 2020-01-27 19:07:18 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.2ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 67.8ms | Allocations: 34489)
+  Rendered books/index.html.erb within layouts/application (Duration: 75.9ms | Allocations: 39622)
+Completed 200 OK in 195ms (Views: 182.5ms | ActiveRecord: 2.1ms | Allocations: 58785)
+
+
+Started GET "/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--3661a4de1f0940f50f5c8bd545e7bd056affe1c2/200.jpg" for ::1 at 2020-01-27 19:07:18 -0500
+Started GET "/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--c821811ae11a6e06c7adfffd0b206e7c37702a32/200.jpg" for ::1 at 2020-01-27 19:07:18 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ActiveStorage::BlobsController#show as JPEG
+  Parameters: {"signed_id"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--c821811ae11a6e06c7adfffd0b206e7c37702a32", "filename"=>"200"}
+Processing by ActiveStorage::BlobsController#show as JPEG
+  Parameters: {"signed_id"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--3661a4de1f0940f50f5c8bd545e7bd056affe1c2", "filename"=>"200"}
+  [1m[36mActiveStorage::Blob Load (0.6ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+[36m  Disk Storage (4.9ms) [0m[34mGenerated URL for file at key: pw8f3magqxiq6nqihmsik1baecdu (http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhjSGM0WmpOdFlXZHhlR2x4Tm01eGFXaHRjMmxyTVdKaFpXTmtkUVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MDdaIiwicHVyIjoiYmxvYl9rZXkifX0=--4264cdd9f7b44cf3b63018b20ae0299ab76f4972/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg)[0m
+Redirected to http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhjSGM0WmpOdFlXZHhlR2x4Tm01eGFXaHRjMmxyTVdKaFpXTmtkUVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MDdaIiwicHVyIjoiYmxvYl9rZXkifX0=--4264cdd9f7b44cf3b63018b20ae0299ab76f4972/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg
+Completed 302 Found in 31ms (ActiveRecord: 0.6ms | Allocations: 4296)
+
+
+[36m  Disk Storage (3.0ms) [0m[34mGenerated URL for file at key: olpu7nbwyyxehi4yw4irr8iut45x (http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg)[0m
+Redirected to http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg
+Completed 302 Found in 31ms (ActiveRecord: 0.4ms | Allocations: 4277)
+
+
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg" for ::1 at 2020-01-27 19:07:18 -0500
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhjSGM0WmpOdFlXZHhlR2x4Tm01eGFXaHRjMmxyTVdKaFpXTmtkUVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MDdaIiwicHVyIjoiYmxvYl9rZXkifX0=--4264cdd9f7b44cf3b63018b20ae0299ab76f4972/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg" for ::1 at 2020-01-27 19:07:18 -0500
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"200.jpg\"; filename*=UTF-8''200.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80", "filename"=>"200"}
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"200.jpg\"; filename*=UTF-8''200.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhjSGM0WmpOdFlXZHhlR2x4Tm01eGFXaHRjMmxyTVdKaFpXTmtkUVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MDdaIiwicHVyIjoiYmxvYl9rZXkifX0=--4264cdd9f7b44cf3b63018b20ae0299ab76f4972", "filename"=>"200"}
+Completed 200 OK in 6ms (ActiveRecord: 0.0ms | Allocations: 884)
+
+
+Completed 200 OK in 7ms (ActiveRecord: 0.0ms | Allocations: 750)
+
+
+Started GET "/books/2/edit" for ::1 at 2020-01-27 19:07:24 -0500
+Processing by BooksController#edit as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mBook Load (0.4ms)[0m  [1m[34mSELECT "books".* FROM "books" WHERE "books"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:87:in `set_book'
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering books/edit.html.erb within layouts/application
+  Rendered books/_form.html.erb (Duration: 8.3ms | Allocations: 6317)
+  Rendered books/edit.html.erb within layouts/application (Duration: 10.2ms | Allocations: 6503)
+Completed 200 OK in 47ms (Views: 34.4ms | ActiveRecord: 1.6ms | Allocations: 22609)
+
+
+Started PATCH "/books/2" for ::1 at 2020-01-27 19:07:39 -0500
+Processing by BooksController#update as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"LlYelVY+m1qG21k316TN5qJEBNn86L3KfJHi0Tw4ZlG3u5lpNrnCzj9+ahZwbO3yGPrlFAXcqEAPbDohfRfqrg==", "book"=>{"title"=>"Test", "description"=>"Text Description", "author"=>"Test", "thumbnail"=>#<ActionDispatch::Http::UploadedFile:0x000000000aea0e70 @tempfile=#<Tempfile:C:/Users/ebadm/AppData/Local/Temp/RackMultipart20200127-7516-1hssl36.jpg>, @original_filename="book-cover-352.jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"book[thumbnail]\"; filename=\"book-cover-352.jpg\"\r\nContent-Type: image/jpeg\r\n">}, "commit"=>"Update Book", "id"=>"2"}
+  [1m[36mBook Load (0.2ms)[0m  [1m[34mSELECT "books".* FROM "books" WHERE "books"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:87:in `set_book'
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[36mBook Update (1.1ms)[0m  [1m[33mUPDATE "books" SET "title" = ?, "author" = ?, "updated_at" = ? WHERE "books"."id" = ?[0m  [["title", "Test"], ["author", "Test"], ["updated_at", "2020-01-28 00:07:39.421462"], ["id", 2]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[36mActiveStorage::Blob Load (0.2ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[36mActiveStorage::Attachment Load (0.2ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[36mActiveStorage::Attachment Destroy (0.6ms)[0m  [1m[31mDELETE FROM "active_storage_attachments" WHERE "active_storage_attachments"."id" = ?[0m  [["id", 2]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[36mActiveStorage::Blob Create (0.3ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["key", "1cva6wa4wc69pepe02dsje4j38m7"], ["filename", "book-cover-352.jpg"], ["content_type", "image/jpeg"], ["metadata", "{\"identified\":true}"], ["byte_size", 92433], ["checksum", "swN1JkQ5PyqQMYiCjBo5Ng=="], ["created_at", "2020-01-28 00:07:39.448227"]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "thumbnail"], ["record_type", "Book"], ["record_id", 2], ["blob_id", 3], ["created_at", "2020-01-28 00:07:39.451120"]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[36mBook Update (0.2ms)[0m  [1m[33mUPDATE "books" SET "updated_at" = ? WHERE "books"."id" = ?[0m  [["updated_at", "2020-01-28 00:07:39.455942"], ["id", 2]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+  [1m[35m (3.7ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+[36m  Disk Storage (3.2ms) [0m[32mUploaded file to key: 1cva6wa4wc69pepe02dsje4j38m7 (checksum: swN1JkQ5PyqQMYiCjBo5Ng==)[0m
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:45:in `block in update'
+[ActiveJob] Enqueued ActiveStorage::PurgeJob (Job ID: d2fdca9d-8eaf-4f55-a4f8-fdb98c0c0842) to Sidekiq(default) with arguments: #<GlobalID:0x000000000c7d2088 @uri=#<URI::GID gid://book-library/ActiveStorage::Blob/2>>
+Completed 500 Internal Server Error in 10087ms (ActiveRecord: 8.4ms | Allocations: 22858)
+
+
+
+Redis::TimeoutError - Redis::TimeoutError:
+  app/controllers/books_controller.rb:45:in `block in update'
+  app/controllers/books_controller.rb:44:in `update'
+
+Started POST "/__better_errors/35bff61e712970ca/variables" for ::1 at 2020-01-27 19:07:49 -0500
+Started GET "/books/2" for ::1 at 2020-01-27 19:07:53 -0500
+Processing by BooksController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mBook Load (0.3ms)[0m  [1m[34mSELECT "books".* FROM "books" WHERE "books"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:87:in `set_book'
+  Rendering books/show.html.erb within layouts/application
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/show.html.erb:4
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/show.html.erb:4
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  Rendered books/_book-controls.html.erb (Duration: 4.1ms | Allocations: 1217)
+  Rendered books/show.html.erb within layouts/application (Duration: 27.5ms | Allocations: 4717)
+Completed 200 OK in 54ms (Views: 48.4ms | ActiveRecord: 1.2ms | Allocations: 19255)
+
+
+Started GET "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--64001541ff8a4a824603efa00245df0d527252cd/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9MY21WemFYcGxTU0lNTXpJd2VEUTVOUVk2QmtWVSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--f24424f7be547b2971f2a3ba45689927092e2678/book-cover-352.jpg" for ::1 at 2020-01-27 19:07:53 -0500
+Processing by ActiveStorage::RepresentationsController#show as JPEG
+  Parameters: {"signed_blob_id"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--64001541ff8a4a824603efa00245df0d527252cd", "variation_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9MY21WemFYcGxTU0lNTXpJd2VEUTVOUVk2QmtWVSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--f24424f7be547b2971f2a3ba45689927092e2678", "filename"=>"book-cover-352"}
+  [1m[36mActiveStorage::Blob Load (0.8ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+[36m  Disk Storage (0.4ms) [0m[34mChecked if file exists at key: variants/1cva6wa4wc69pepe02dsje4j38m7/783d8746dc12b24b6461e580e073956bc8b2f6042d259952b575414c905e9991 (no)[0m
+[36m  Disk Storage (33.4ms) [0m[34mDownloaded file from key: 1cva6wa4wc69pepe02dsje4j38m7[0m
+DEPRECATION WARNING: Generating image variants will require the image_processing gem in Rails 6.1. Please add `gem 'image_processing', '~> 1.2'` to your Gemfile. (called from transformer at C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/activestorage-6.0.2.1/app/models/active_storage/variation.rb:64)
+Completed 500 Internal Server Error in 104ms (ActiveRecord: 0.8ms | Allocations: 7404)
+
+
+
+MiniMagick::Error - You must have ImageMagick or GraphicsMagick installed:
+
+Started GET "/" for ::1 at 2020-01-27 19:07:57 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.5ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 30.3ms | Allocations: 5280)
+  Rendered books/index.html.erb within layouts/application (Duration: 34.2ms | Allocations: 6055)
+Completed 200 OK in 56ms (Views: 53.3ms | ActiveRecord: 2.0ms | Allocations: 19936)
+
+
+Started GET "/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--64001541ff8a4a824603efa00245df0d527252cd/book-cover-352.jpg" for ::1 at 2020-01-27 19:07:57 -0500
+Started GET "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--64001541ff8a4a824603efa00245df0d527252cd/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9MY21WemFYcGxTU0lNTXpJd2VEUTVOUVk2QmtWVSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--f24424f7be547b2971f2a3ba45689927092e2678/book-cover-352.jpg" for ::1 at 2020-01-27 19:07:57 -0500
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg" for ::1 at 2020-01-27 19:07:57 -0500
+Processing by ActiveStorage::BlobsController#show as JPEG
+  Parameters: {"signed_id"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--64001541ff8a4a824603efa00245df0d527252cd", "filename"=>"book-cover-352"}
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+Processing by ActiveStorage::RepresentationsController#show as JPEG
+  Parameters: {"signed_blob_id"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--64001541ff8a4a824603efa00245df0d527252cd", "variation_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9MY21WemFYcGxTU0lNTXpJd2VEUTVOUVk2QmtWVSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--f24424f7be547b2971f2a3ba45689927092e2678", "filename"=>"book-cover-352"}
+  [1m[36mActiveStorage::Blob Load (0.5ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+[36m  Disk Storage (1.2ms) [0m[34mGenerated URL for file at key: 1cva6wa4wc69pepe02dsje4j38m7 (http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6MTI6NTcuMzU3WiIsInB1ciI6ImJsb2Jfa2V5In19--af8f0c37df532e074f6d96b5da4162e8e511c6b0/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg)[0m
+Redirected to http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6MTI6NTcuMzU3WiIsInB1ciI6ImJsb2Jfa2V5In19--af8f0c37df532e074f6d96b5da4162e8e511c6b0/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg
+Completed 302 Found in 29ms (ActiveRecord: 0.4ms | Allocations: 3663)
+
+
+[36m  Disk Storage (5.3ms) [0m[34mChecked if file exists at key: variants/1cva6wa4wc69pepe02dsje4j38m7/783d8746dc12b24b6461e580e073956bc8b2f6042d259952b575414c905e9991 (no)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"200.jpg\"; filename*=UTF-8''200.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80", "filename"=>"200"}
+Completed 304 Not Modified in 2ms (ActiveRecord: 0.0ms | Allocations: 422)
+
+
+[36m  Disk Storage (8.7ms) [0m[34mDownloaded file from key: 1cva6wa4wc69pepe02dsje4j38m7[0m
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6MTI6NTcuMzU3WiIsInB1ciI6ImJsb2Jfa2V5In19--af8f0c37df532e074f6d96b5da4162e8e511c6b0/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg" for ::1 at 2020-01-27 19:07:57 -0500
+DEPRECATION WARNING: Generating image variants will require the image_processing gem in Rails 6.1. Please add `gem 'image_processing', '~> 1.2'` to your Gemfile. (called from transformer at C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/activestorage-6.0.2.1/app/models/active_storage/variation.rb:64)
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"book-cover-352.jpg\"; filename*=UTF-8''book-cover-352.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6MTI6NTcuMzU3WiIsInB1ciI6ImJsb2Jfa2V5In19--af8f0c37df532e074f6d96b5da4162e8e511c6b0", "filename"=>"book-cover-352"}
+Completed 200 OK in 1ms (ActiveRecord: 0.0ms | Allocations: 468)
+
+
+Completed 500 Internal Server Error in 83ms (ActiveRecord: 0.5ms | Allocations: 12163)
+
+
+
+MiniMagick::Error - You must have ImageMagick or GraphicsMagick installed:
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 19:08:05 -0500
+Processing by RegistrationsController#new as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 9ms (ActiveRecord: 0.4ms | Allocations: 1951)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:08:05 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.4ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.9ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 23.4ms | Allocations: 5272)
+  Rendered books/index.html.erb within layouts/application (Duration: 27.4ms | Allocations: 6027)
+Completed 200 OK in 60ms (Views: 55.8ms | ActiveRecord: 2.6ms | Allocations: 19958)
+
+
+Started GET "/users/edit" for ::1 at 2020-01-27 19:08:15 -0500
+Processing by RegistrationsController#edit as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering devise/registrations/edit.html.erb within layouts/application
+  Rendered devise/registrations/edit.html.erb within layouts/application (Duration: 15.6ms | Allocations: 6477)
+Completed 200 OK in 54ms (Views: 47.6ms | ActiveRecord: 0.4ms | Allocations: 22043)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:08:18 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (1.0ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.8ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.9ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.6ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (1.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 39.7ms | Allocations: 5271)
+  Rendered books/index.html.erb within layouts/application (Duration: 45.5ms | Allocations: 6026)
+Completed 200 OK in 102ms (Views: 95.6ms | ActiveRecord: 4.7ms | Allocations: 19891)
+
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 19:08:21 -0500
+Processing by RegistrationsController#new as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 11ms (ActiveRecord: 0.5ms | Allocations: 1791)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:08:21 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.7ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (1.2ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 70.8ms | Allocations: 6512)
+  Rendered books/index.html.erb within layouts/application (Duration: 78.0ms | Allocations: 7267)
+Completed 200 OK in 101ms (Views: 96.7ms | ActiveRecord: 3.3ms | Allocations: 21197)
+
+
+Started GET "/users/edit" for ::1 at 2020-01-27 19:08:32 -0500
+Processing by RegistrationsController#edit as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering devise/registrations/edit.html.erb within layouts/application
+  Rendered devise/registrations/edit.html.erb within layouts/application (Duration: 17.1ms | Allocations: 6285)
+Completed 200 OK in 67ms (Views: 60.7ms | ActiveRecord: 0.6ms | Allocations: 21677)
+
+
+Started DELETE "/users/sign_out" for ::1 at 2020-01-27 19:08:36 -0500
+  
+ActionController::RoutingError (No route matches [DELETE] "/users/sign_out"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.1.1) lib/rack/method_override.rb:24:in `call'
+rack (2.1.1) lib/rack/runtime.rb:24:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.1.1) lib/rack/sendfile.rb:113:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/sign_out" for ::1 at 2020-01-27 19:08:39 -0500
+Processing by Devise::SessionsController#destroy as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 8ms (ActiveRecord: 0.4ms | Allocations: 2521)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:08:39 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.7ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.6ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 23.5ms | Allocations: 4313)
+  Rendered books/index.html.erb within layouts/application (Duration: 29.3ms | Allocations: 5070)
+Completed 200 OK in 50ms (Views: 46.8ms | ActiveRecord: 2.6ms | Allocations: 18960)
+
+
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg" for ::1 at 2020-01-27 19:08:39 -0500
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6MTI6NTcuMzU3WiIsInB1ciI6ImJsb2Jfa2V5In19--af8f0c37df532e074f6d96b5da4162e8e511c6b0/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg" for ::1 at 2020-01-27 19:08:39 -0500
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"200.jpg\"; filename*=UTF-8''200.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80", "filename"=>"200"}
+Completed 304 Not Modified in 1ms (ActiveRecord: 0.0ms | Allocations: 391)
+
+
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"book-cover-352.jpg\"; filename*=UTF-8''book-cover-352.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6MTI6NTcuMzU3WiIsInB1ciI6ImJsb2Jfa2V5In19--af8f0c37df532e074f6d96b5da4162e8e511c6b0", "filename"=>"book-cover-352"}
+Completed 304 Not Modified in 2ms (ActiveRecord: 0.0ms | Allocations: 390)
+
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 19:08:44 -0500
+Processing by RegistrationsController#new as HTML
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.5ms | Allocations: 122)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 12.1ms | Allocations: 6379)
+Completed 200 OK in 55ms (Views: 54.3ms | ActiveRecord: 0.0ms | Allocations: 20968)
+
+
+Started GET "/users/sign_in" for ::1 at 2020-01-27 19:08:46 -0500
+Processing by Devise::SessionsController#new as HTML
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.4ms | Allocations: 146)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 14.4ms | Allocations: 5479)
+Completed 200 OK in 39ms (Views: 37.1ms | ActiveRecord: 0.0ms | Allocations: 19721)
+
+
+Started POST "/users/sign_in" for ::1 at 2020-01-27 19:08:51 -0500
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"/Tz0hsBmCPVmHCkXLmJNNbrzt/U17CqpUKMqJ1vU8CX2NxTGxSIm+a8VG/V/cDmEsqGCQTb8scUBVucl7gAY8w==", "user"=>{"email"=>"test@gmail.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["email", "test@gmail.com"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Update (2.6ms)[0m  [1m[33mUPDATE "users" SET "current_sign_in_at" = ?, "last_sign_in_at" = ?, "sign_in_count" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["current_sign_in_at", "2020-01-28 00:08:51.307474"], ["last_sign_in_at", "2020-01-27 22:23:35.029970"], ["sign_in_count", 3], ["updated_at", "2020-01-28 00:08:51.307956"], ["id", 2]]
+  [1m[35m (3.4ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/
+Completed 302 Found in 151ms (ActiveRecord: 6.6ms | Allocations: 7459)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:08:51 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.4ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (1.2ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 21.6ms | Allocations: 5188)
+  Rendered books/index.html.erb within layouts/application (Duration: 25.1ms | Allocations: 5962)
+Completed 200 OK in 47ms (Views: 43.5ms | ActiveRecord: 2.9ms | Allocations: 19834)
+
+
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg" for ::1 at 2020-01-27 19:08:51 -0500
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6MTI6NTcuMzU3WiIsInB1ciI6ImJsb2Jfa2V5In19--af8f0c37df532e074f6d96b5da4162e8e511c6b0/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg" for ::1 at 2020-01-27 19:08:51 -0500
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"200.jpg\"; filename*=UTF-8''200.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDoxMjoxOC43MTVaIiwicHVyIjoiYmxvYl9rZXkifX0=--f4018ba4f4330f2cea948d8dc9a7810603efdf80", "filename"=>"200"}
+Completed 304 Not Modified in 2ms (ActiveRecord: 0.0ms | Allocations: 412)
+
+
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"book-cover-352.jpg\"; filename*=UTF-8''book-cover-352.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6MTI6NTcuMzU3WiIsInB1ciI6ImJsb2Jfa2V5In19--af8f0c37df532e074f6d96b5da4162e8e511c6b0", "filename"=>"book-cover-352"}
+Completed 304 Not Modified in 2ms (ActiveRecord: 0.0ms | Allocations: 411)
+
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 19:08:54 -0500
+Processing by RegistrationsController#new as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 6ms (ActiveRecord: 0.3ms | Allocations: 1799)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:08:54 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.4ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.6ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 22.5ms | Allocations: 5083)
+  Rendered books/index.html.erb within layouts/application (Duration: 28.1ms | Allocations: 5838)
+Completed 200 OK in 50ms (Views: 46.5ms | ActiveRecord: 2.5ms | Allocations: 19747)
+
+
+Started GET "/users/edit" for ::1 at 2020-01-27 19:37:03 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by RegistrationsController#edit as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  Rendering devise/registrations/edit.html.erb within layouts/application
+  Rendered devise/registrations/edit.html.erb within layouts/application (Duration: 8.7ms | Allocations: 6332)
+Completed 200 OK in 50ms (Views: 35.4ms | ActiveRecord: 0.5ms | Allocations: 22077)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:37:06 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.8ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.7ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.7ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.5ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 33.9ms | Allocations: 5121)
+  Rendered books/index.html.erb within layouts/application (Duration: 41.2ms | Allocations: 5895)
+Completed 200 OK in 96ms (Views: 91.6ms | ActiveRecord: 3.3ms | Allocations: 19744)
+
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 19:37:10 -0500
+Processing by RegistrationsController#new as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 8ms (ActiveRecord: 0.4ms | Allocations: 1801)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:37:10 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.3ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.5ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.5ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mActiveStorage::Attachment Load (0.5ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.6ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 40.0ms | Allocations: 5083)
+  Rendered books/index.html.erb within layouts/application (Duration: 51.6ms | Allocations: 5838)
+Completed 200 OK in 148ms (Views: 143.7ms | ActiveRecord: 2.8ms | Allocations: 19767)
+
+
+Started GET "/users/edit" for ::1 at 2020-01-27 19:38:12 -0500
+Processing by RegistrationsController#edit as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  Rendering devise/registrations/edit.html.erb within layouts/application
+  Rendered devise/registrations/edit.html.erb within layouts/application (Duration: 22.7ms | Allocations: 6285)
+Completed 200 OK in 88ms (Views: 81.0ms | ActiveRecord: 0.5ms | Allocations: 21637)
+
+
+Started DELETE "/users" for ::1 at 2020-01-27 19:38:23 -0500
+Processing by RegistrationsController#destroy as HTML
+  Parameters: {"authenticity_token"=>"v9q/3srLm5EBpANYFn7rY0cKbfKpTZ+uexgFF7cUSJPhzkcSrIbYcJV5ccW0YG6A7ohnzmLSMyfNHqWK2Swj5g=="}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mBook Load (0.9ms)[0m  [1m[34mSELECT "books".* FROM "books" WHERE "books"."user_id" = ?[0m  [["user_id", 2]]
+  [1m[36mUser Destroy (1.0ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 2]]
+  [1m[35m (3.5ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/
+Completed 302 Found in 25ms (ActiveRecord: 5.8ms | Allocations: 8391)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:38:23 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.3ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.5ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.5ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 24.1ms | Allocations: 4310)
+  Rendered books/index.html.erb within layouts/application (Duration: 31.4ms | Allocations: 5065)
+Completed 200 OK in 61ms (Views: 58.4ms | ActiveRecord: 2.1ms | Allocations: 18955)
+
+
+Started GET "/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--3661a4de1f0940f50f5c8bd545e7bd056affe1c2/200.jpg" for ::1 at 2020-01-27 19:38:23 -0500
+Processing by ActiveStorage::BlobsController#show as JPEG
+  Parameters: {"signed_id"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--3661a4de1f0940f50f5c8bd545e7bd056affe1c2", "filename"=>"200"}
+  [1m[36mActiveStorage::Blob Load (0.2ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+[36m  Disk Storage (0.8ms) [0m[34mGenerated URL for file at key: olpu7nbwyyxehi4yw4irr8iut45x (http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDo0MzoyMy40MDhaIiwicHVyIjoiYmxvYl9rZXkifX0=--2acfc80b8bcda30b1f06653dbc5e63581e1bd669/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg)[0m
+Redirected to http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDo0MzoyMy40MDhaIiwicHVyIjoiYmxvYl9rZXkifX0=--2acfc80b8bcda30b1f06653dbc5e63581e1bd669/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg
+Completed 302 Found in 12ms (ActiveRecord: 0.2ms | Allocations: 2010)
+
+
+Started GET "/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--64001541ff8a4a824603efa00245df0d527252cd/book-cover-352.jpg" for ::1 at 2020-01-27 19:38:23 -0500
+Processing by ActiveStorage::BlobsController#show as JPEG
+  Parameters: {"signed_id"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--64001541ff8a4a824603efa00245df0d527252cd", "filename"=>"book-cover-352"}
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+[36m  Disk Storage (1.0ms) [0m[34mGenerated URL for file at key: 1cva6wa4wc69pepe02dsje4j38m7 (http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6NDM6MjMuNDIyWiIsInB1ciI6ImJsb2Jfa2V5In19--c68be8ae50685259f803639c2717e8de26d79de4/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg)[0m
+Redirected to http://localhost:3000/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6NDM6MjMuNDIyWiIsInB1ciI6ImJsb2Jfa2V5In19--c68be8ae50685259f803639c2717e8de26d79de4/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg
+Completed 302 Found in 13ms (ActiveRecord: 0.4ms | Allocations: 2386)
+
+
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDo0MzoyMy40MDhaIiwicHVyIjoiYmxvYl9rZXkifX0=--2acfc80b8bcda30b1f06653dbc5e63581e1bd669/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg" for ::1 at 2020-01-27 19:38:23 -0500
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"200.jpg\"; filename*=UTF-8''200.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDo0MzoyMy40MDhaIiwicHVyIjoiYmxvYl9rZXkifX0=--2acfc80b8bcda30b1f06653dbc5e63581e1bd669", "filename"=>"200"}
+Completed 200 OK in 2ms (ActiveRecord: 0.0ms | Allocations: 414)
+
+
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6NDM6MjMuNDIyWiIsInB1ciI6ImJsb2Jfa2V5In19--c68be8ae50685259f803639c2717e8de26d79de4/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg" for ::1 at 2020-01-27 19:38:23 -0500
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"book-cover-352.jpg\"; filename*=UTF-8''book-cover-352.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6NDM6MjMuNDIyWiIsInB1ciI6ImJsb2Jfa2V5In19--c68be8ae50685259f803639c2717e8de26d79de4", "filename"=>"book-cover-352"}
+Completed 200 OK in 1ms (ActiveRecord: 0.0ms | Allocations: 412)
+
+
+Started GET "/users/sign_up" for ::1 at 2020-01-27 19:38:30 -0500
+Processing by RegistrationsController#new as HTML
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.5ms | Allocations: 79)
+  Rendered devise/registrations/new.html.erb within layouts/application (Duration: 14.6ms | Allocations: 5953)
+Completed 200 OK in 42ms (Views: 40.6ms | ActiveRecord: 0.0ms | Allocations: 20021)
+
+
+Started POST "/users" for ::1 at 2020-01-27 19:38:44 -0500
+Processing by RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"T/yI2VsKJ3DUK0CJ19U31qgVLU+QtpjRTk7Wi/8+seKXvXyW0NgJVEICGGMeHodz7n9N2FwpaZRrg1IPC0H7iA==", "user"=>{"name"=>"yassine", "email"=>"test@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "test@gmail.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (1.4ms)[0m  [1m[32mINSERT INTO "users" ("email", "encrypted_password", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["email", "test@gmail.com"], ["encrypted_password", "$2a$11$o/pYw31TvpnrKlMoYEqeuOulk62y4dgNtJB9Wn6gYPoO/scwUDvXy"], ["name", "yassine"], ["created_at", "2020-01-28 00:38:44.824799"], ["updated_at", "2020-01-28 00:38:44.824799"]]
+  [1m[35m (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Update (1.3ms)[0m  [1m[33mUPDATE "users" SET "sign_in_count" = ?, "current_sign_in_at" = ?, "last_sign_in_at" = ?, "current_sign_in_ip" = ?, "last_sign_in_ip" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["sign_in_count", 1], ["current_sign_in_at", "2020-01-28 00:38:44.841034"], ["last_sign_in_at", "2020-01-28 00:38:44.841034"], ["current_sign_in_ip", "::1"], ["last_sign_in_ip", "::1"], ["updated_at", "2020-01-28 00:38:44.841256"], ["id", 4]]
+  [1m[35m (4.1ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/pricing
+Completed 302 Found in 174ms (ActiveRecord: 10.6ms | Allocations: 13516)
+
+
+Started GET "/pricing" for ::1 at 2020-01-27 19:38:44 -0500
+Processing by PricingController#index as HTML
+  Rendering pricing/index.html.erb within layouts/subscribe
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/pricing/index.html.erb:13
+  Rendered pricing/index.html.erb within layouts/subscribe (Duration: 8.9ms | Allocations: 1088)
+Completed 200 OK in 31ms (Views: 29.9ms | ActiveRecord: 0.5ms | Allocations: 14996)
+
+
+Started GET "/subscriptions/new?plan=book_worm&plan_id=plan_Gcvq8bwlKGARoL" for ::1 at 2020-01-27 19:38:47 -0500
+Processing by SubscriptionsController#new as HTML
+  Parameters: {"plan"=>"book_worm", "plan_id"=>"plan_Gcvq8bwlKGARoL"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:6:in `new'
+  Rendering subscriptions/new.html.erb within layouts/subscribe
+  Rendered subscriptions/new.html.erb within layouts/subscribe (Duration: 1.0ms | Allocations: 179)
+Completed 200 OK in 43ms (Views: 36.6ms | ActiveRecord: 0.5ms | Allocations: 14890)
+
+
+Started POST "/subscriptions" for ::1 at 2020-01-27 19:38:56 -0500
+Processing by SubscriptionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Mt8OsMbZb+UZkSDqc6tdfs7ZNJbgAjB9H+V9cfbxwx+xPOd0pqV97pE/EsG3sVjLAeBX0aXK0PCpCoi3kedTnA==", "plan_id"=>"plan_Gcvq8bwlKGARoL", "stripeToken"=>"tok_1G5i6VGIOQDtJuifEs0cRzL8", "user"=>{"card_type"=>"undefined", "card_last4"=>"4242", "card_exp_month"=>"4", "card_exp_year"=>"2024"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/subscriptions_controller.rb:20:in `create'
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/subscriptions_controller.rb:41:in `create'
+  [1m[36mUser Update (3.5ms)[0m  [1m[33mUPDATE "users" SET "stripe_id" = ?, "stripe_subscription_id" = ?, "subscribed" = ?, "card_last4" = ?, "card_exp_month" = ?, "card_exp_year" = ?, "card_type" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["stripe_id", "cus_Gcy2zmBniXaRyN"], ["stripe_subscription_id", "sub_Gcy2nY7B4xNm18"], ["subscribed", 1], ["card_last4", "4242"], ["card_exp_month", 4], ["card_exp_year", 2024], ["card_type", "undefined"], ["updated_at", "2020-01-28 00:38:59.969802"], ["id", 4]]
+  ↳ app/controllers/subscriptions_controller.rb:41:in `create'
+  [1m[35m (2.7ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/subscriptions_controller.rb:41:in `create'
+Redirected to http://localhost:3000/
+Completed 302 Found in 3015ms (ActiveRecord: 6.6ms | Allocations: 11402)
+
+
+Started GET "/" for ::1 at 2020-01-27 19:39:00 -0500
+Processing by BooksController#index as HTML
+  Rendering books/index.html.erb within layouts/application
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books"[0m
+  ↳ app/views/books/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 1], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.4ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/helpers/application_helper.rb:12:in `subscribed?'
+  [1m[36mLibrary Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "libraries" WHERE "libraries"."user_id" = ? AND "libraries"."user_id" = ? AND "libraries"."book_id" = ? LIMIT ?[0m  [["user_id", 4], ["user_id", 4], ["book_id", 1], ["LIMIT", 1]]
+  ↳ app/helpers/books_helper.rb:3:in `user_added_to_library?'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.3ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mLibrary Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "libraries" WHERE "libraries"."user_id" = ? AND "libraries"."user_id" = ? AND "libraries"."book_id" = ? LIMIT ?[0m  [["user_id", 4], ["user_id", 4], ["book_id", 2], ["LIMIT", 1]]
+  ↳ app/helpers/books_helper.rb:3:in `user_added_to_library?'
+  Rendered collection of books/_book.html.erb [2 times] (Duration: 41.0ms | Allocations: 10649)
+  Rendered books/index.html.erb within layouts/application (Duration: 46.1ms | Allocations: 11405)
+Completed 200 OK in 67ms (Views: 62.6ms | ActiveRecord: 2.8ms | Allocations: 25320)
+
+
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDo0MzoyMy40MDhaIiwicHVyIjoiYmxvYl9rZXkifX0=--2acfc80b8bcda30b1f06653dbc5e63581e1bd669/200.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22200.jpg%22%3B+filename%2A%3DUTF-8%27%27200.jpg" for ::1 at 2020-01-27 19:39:00 -0500
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6NDM6MjMuNDIyWiIsInB1ciI6ImJsb2Jfa2V5In19--c68be8ae50685259f803639c2717e8de26d79de4/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg" for ::1 at 2020-01-27 19:39:00 -0500
+Processing by ActiveStorage::DiskController#show as JPEG
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"200.jpg\"; filename*=UTF-8''200.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhiMnh3ZFRkdVluZDVlWGhsYUdrMGVYYzBhWEp5T0dsMWREUTFlQVk2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpT1dsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpJd01DNXFjR2NpT3lCbWFXeGxibUZ0WlNvOVZWUkdMVGduSnpJd01DNXFjR2NHT3daVU9oRmpiMjUwWlc1MFgzUjVjR1ZKSWc5cGJXRm5aUzlxY0dWbkJqc0dWQT09IiwiZXhwIjoiMjAyMC0wMS0yOFQwMDo0MzoyMy40MDhaIiwicHVyIjoiYmxvYl9rZXkifX0=--2acfc80b8bcda30b1f06653dbc5e63581e1bd669", "filename"=>"200"}
+Completed 304 Not Modified in 1ms (ActiveRecord: 0.0ms | Allocations: 628)
+
+
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"book-cover-352.jpg\"; filename*=UTF-8''book-cover-352.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6NDM6MjMuNDIyWiIsInB1ciI6ImJsb2Jfa2V5In19--c68be8ae50685259f803639c2717e8de26d79de4", "filename"=>"book-cover-352"}
+Completed 304 Not Modified in 2ms (ActiveRecord: 0.0ms | Allocations: 411)
+
+
+Started PUT "/books/2/add?type=add" for ::1 at 2020-01-27 19:39:05 -0500
+Processing by BooksController#library as HTML
+  Parameters: {"authenticity_token"=>"VZCF5mfPMnaHCZWxI/mVOXJhTi24mmWMf6aqFBgP0TDs6tlBxluSu5BCf4zasFgn0T26BOlf9DKMxIZJOaEGnA==", "type"=>"add", "id"=>"2"}
+  [1m[36mBook Load (0.4ms)[0m  [1m[34mSELECT "books".* FROM "books" WHERE "books"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/books_controller.rb:87:in `set_book'
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/books_controller.rb:71:in `library'
+  [1m[36mLibrary Create (3.1ms)[0m  [1m[32mINSERT INTO "libraries" ("book_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["book_id", 2], ["user_id", 4], ["created_at", "2020-01-28 00:39:05.407210"], ["updated_at", "2020-01-28 00:39:05.407210"]]
+  ↳ app/controllers/books_controller.rb:71:in `library'
+  [1m[35m (2.8ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/books_controller.rb:71:in `library'
+Redirected to http://localhost:3000/library
+Completed 302 Found in 34ms (ActiveRecord: 7.8ms | Allocations: 9655)
+
+
+Started GET "/library" for ::1 at 2020-01-27 19:39:05 -0500
+Processing by LibraryController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  Rendering library/index.html.erb within layouts/application
+  [1m[36mBook Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "books" INNER JOIN "libraries" ON "books"."id" = "libraries"."book_id" WHERE "libraries"."user_id" = ? LIMIT ?[0m  [["user_id", 4], ["LIMIT", 1]]
+  ↳ app/views/library/index.html.erb:14
+  [1m[36mBook Load (0.6ms)[0m  [1m[34mSELECT "books".* FROM "books" INNER JOIN "libraries" ON "books"."id" = "libraries"."book_id" WHERE "libraries"."user_id" = ?[0m  [["user_id", 4]]
+  ↳ app/views/library/index.html.erb:16
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?[0m  [["record_id", 2], ["record_type", "Book"], ["name", "thumbnail"], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mActiveStorage::Blob Load (0.6ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/books/_book.html.erb:5
+  [1m[36mLibrary Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "libraries" WHERE "libraries"."user_id" = ? AND "libraries"."user_id" = ? AND "libraries"."book_id" = ? LIMIT ?[0m  [["user_id", 4], ["user_id", 4], ["book_id", 2], ["LIMIT", 1]]
+  ↳ app/helpers/books_helper.rb:3:in `user_added_to_library?'
+  Rendered collection of books/_book.html.erb [1 times] (Duration: 12.7ms | Allocations: 3562)
+  Rendered library/index.html.erb within layouts/application (Duration: 26.9ms | Allocations: 5719)
+Completed 200 OK in 54ms (Views: 45.0ms | ActiveRecord: 2.7ms | Allocations: 21306)
+
+
+Started GET "/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6NDM6MjMuNDIyWiIsInB1ciI6ImJsb2Jfa2V5In19--c68be8ae50685259f803639c2717e8de26d79de4/book-cover-352.jpg?content_type=image%2Fjpeg&disposition=inline%3B+filename%3D%22book-cover-352.jpg%22%3B+filename%2A%3DUTF-8%27%27book-cover-352.jpg" for ::1 at 2020-01-27 19:39:05 -0500
+Processing by ActiveStorage::DiskController#show as JPEG
+  Parameters: {"content_type"=>"image/jpeg", "disposition"=>"inline; filename=\"book-cover-352.jpg\"; filename*=UTF-8''book-cover-352.jpg", "encoded_key"=>"eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDRG9JYTJWNVNTSWhNV04yWVRaM1lUUjNZelk1Y0dWd1pUQXlaSE5xWlRScU16aHROd1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpVDJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SW1KdmIyc3RZMjkyWlhJdE16VXlMbXB3WnlJN0lHWnBiR1Z1WVcxbEtqMVZWRVl0T0NjblltOXZheTFqYjNabGNpMHpOVEl1YW5CbkJqc0dWRG9SWTI5dWRHVnVkRjkwZVhCbFNTSVBhVzFoWjJVdmFuQmxad1k3QmxRPSIsImV4cCI6IjIwMjAtMDEtMjhUMDA6NDM6MjMuNDIyWiIsInB1ciI6ImJsb2Jfa2V5In19--c68be8ae50685259f803639c2717e8de26d79de4", "filename"=>"book-cover-352"}
+Completed 304 Not Modified in 3ms (ActiveRecord: 0.0ms | Allocations: 411)
+
+

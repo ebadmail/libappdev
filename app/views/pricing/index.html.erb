@@ -11,7 +11,7 @@
         </div>
         <div class="plan-footer">
           <% if user_signed_in? %>
-            <%= link_to 'Subscribe', new_subscription_path(plan: "starter", plan_id: Rails.application.credentials.starter), class:"button is-fullwidth" %>
+            <%= link_to 'Subscribe', new_subscription_path(plan: "starter", plan_id:"plan_GcvrRIvfxztgB1"), class:"button is-fullwidth" %>
           <% else %>
             <%= link_to 'Subscribe', new_user_registration_path, class: 'button is-fullwidth' %>
          <% end %>
@@ -25,7 +25,7 @@
         </div>
         <div class="plan-footer">
            <% if user_signed_in? %>
-            <%= link_to 'Subscribe', new_subscription_path(plan: "book_worm", plan_id: Rails.application.credentials.book_worm), class:"button is-fullwidth" %>
+            <%= link_to 'Subscribe', new_subscription_path(plan: "book_worm", plan_id: "plan_Gcvq8bwlKGARoL"), class:"button is-fullwidth" %>
           <% else %>
             <%= link_to 'Subscribe', new_user_registration_path, class: 'button is-fullwidth' %>
          <% end %>
@@ -39,7 +39,7 @@
         </div>
         <div class="plan-footer">
          <% if user_signed_in? %>
-            <%= link_to 'Subscribe', new_subscription_path(plan: "scholar", plan_id: Rails.application.credentials.scholar), class:"button is-fullwidth" %>
+            <%= link_to 'Subscribe', new_subscription_path(plan: "scholar", plan_id: "plan_Gcvpt1EOlFTgcf"), class:"button is-fullwidth" %>
           <% else %>
             <%= link_to 'Subscribe', new_user_registration_path, class: 'button is-fullwidth' %>
          <% end %>

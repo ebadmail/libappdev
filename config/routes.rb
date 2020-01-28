@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   end
   resources :library, only:[:index]
   resources :pricing, only:[:index]
-  devise_for :users, controllers: { registrations: "registrations" }
+  devise_for :users, controllers: { registrations: "registrations" }  do
+    get '/users/sign_out' => 'devise/sessions#destroy'
+  end
   root to: 'books#index'
   resources :subscriptions
 end
